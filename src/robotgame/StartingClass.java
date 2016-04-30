@@ -10,11 +10,13 @@ import java.awt.event.KeyListener;
 import java.net.URL;
 
 import model.Background;
+import model.Heliboy;
 import model.Robot;
 
 public class StartingClass extends Applet implements Runnable, KeyListener {
 	private Robot robot;
-	private Image image, currentSprite, character, characterDown, characterJumped, background;
+	private Heliboy hb, hb2;
+	private Image image, currentSprite, character, characterDown, characterJumped, background, heliboy;
 	private URL base;
 	private Graphics second;
 	//We make them static so that we can create getters and setters for them to be used in othe classes for movement)
@@ -44,6 +46,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		characterJumped = getImage(base, "data/jumped.png");
 		currentSprite = character;
 		background = getImage(base, "data/background.png");
+		heliboy = getImage(base, "data/heliboy.png");
 	}
 
 	@Override
@@ -51,6 +54,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		// super.start();
 		bg1 = new Background(0, 0);
 		bg2 = new Background(2160, 0);
+		hb = new Heliboy(340, 360);
+		hb2 = new Heliboy(700, 360);
 		robot = new Robot();
 		Thread thread = new Thread(this);
 		thread.start();
@@ -75,6 +80,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			}else if (robot.isJumped() == false && robot.isDucked() == false){
 				currentSprite = character;
 			}
+			hb.update();
+			hb2.update();
 			bg1.update();
 			bg2.update();
 			/*
@@ -120,6 +127,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     	 * of the robot 61 pixels to the left, and 63 pixels above the (centerX, centerY), and then use 
     	 * the "this" keyword as our ImageObserver.*/
     	g.drawImage(currentSprite, robot.getCenterX() - 61, robot.getCenterY() - 63, this);
+    	g.drawImage(heliboy, hb.getCenterX() - 48, hb.getCenterY() - 48, this);
+    	g.drawImage(heliboy, hb2.getCenterX() - 48, hb2.getCenterY() - 48, this);
     }
 	@Override
 	public void keyTyped(KeyEvent e) {
