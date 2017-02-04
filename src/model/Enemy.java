@@ -3,75 +3,76 @@ package model;
 import robotgame.StartingClass;
 
 public class Enemy {
-	private int maxHealth, currentHealth, power, speedX, centerX, centerY;
-	private Background bg = StartingClass.getBg1();
-	
-	// Behavioral Method
-	public void update() {
-		centerX += speedX;
-		speedX = bg.getSpeedX();
-	}
-	// Behavioral Method
-	public void die() {
-	}
-	
-	// Behavioral Method
-	public void attack() {
-	}
+    private int maxHealth, currentHealth, power, speedX, centerX, centerY;
+    private Background bg = StartingClass.getBg1();
 
-	public int getMaxHealth() {
-		return maxHealth;
-	}
+    // Behavioral Method
+    public void update() {
+        centerX += speedX;
+        speedX = bg.getSpeedX();
+    }
 
-	public int getCurrentHealth() {
-		return currentHealth;
-	}
+    // Behavioral Method
+    public void die() {
+    }
 
-	public int getPower() {
-		return power;
-	}
+    // Behavioral Method
+    public void attack() {
+    }
 
-	public int getSpeedX() {
-		return speedX;
-	}
+    public int getMaxHealth() {
+        return maxHealth;
+    }
 
-	public int getCenterX() {
-		return centerX;
-	}
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
 
-	public int getCenterY() {
-		return centerY;
-	}
+    public int getPower() {
+        return power;
+    }
 
-	public Background getBg() {
-		return bg;
-	}
+    public int getSpeedX() {
+        return speedX;
+    }
 
-	public void setMaxHealth(int maxHealth) {
-		this.maxHealth = maxHealth;
-	}
+    public int getCenterX() {
+        return centerX;
+    }
 
-	public void setCurrentHealth(int currentHealth) {
-		this.currentHealth = currentHealth;
-	}
+    public int getCenterY() {
+        return centerY;
+    }
 
-	public void setPower(int power) {
-		this.power = power;
-	}
+    public Background getBg() {
+        return bg;
+    }
 
-	public void setSpeedX(int speedX) {
-		this.speedX = speedX;
-	}
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
 
-	public void setCenterX(int centerX) {
-		this.centerX = centerX;
-	}
+    public void setCurrentHealth(int currentHealth) {
+        this.currentHealth = currentHealth;
+    }
 
-	public void setCenterY(int centerY) {
-		this.centerY = centerY;
-	}
+    public void setPower(int power) {
+        this.power = power;
+    }
 
-	public void setBg(Background bg) {
-		this.bg = bg;
-	}
+    public void setSpeedX(int speedX) {
+        this.speedX = speedX;
+    }
+
+    public void setCenterX(int centerX) {
+        this.centerX = centerX;
+    }
+
+    public void setCenterY(int centerY) {
+        this.centerY = centerY;
+    }
+
+    public void setBg(Background bg) {
+        this.bg = bg;
+    }
 }
