@@ -51,8 +51,9 @@ public class Robot {
         if (speedX > 0 && centerX > 200) {
             // we will scroll the background
             System.out.println("Scroll Background Here");
-            bg1.setSpeedX(-MOVESPEED);
-            bg2.setSpeedX(-MOVESPEED);
+            
+            bg1.setSpeedX(-MOVESPEED/5);
+            bg2.setSpeedX(-MOVESPEED/5);
         }
 
         // Updates Y Position
