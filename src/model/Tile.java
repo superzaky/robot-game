@@ -22,11 +22,23 @@ public class Tile {
         tileY = y * 40;
 
         type = typeInt;
-
-        if (type == 1) {
-            tileImage = StartingClass.tileocean;
-        } else if (type == 2) {
+        /*
+         * There are arrows below the numbers 8, 4, 6, and 2. I used these numbers to represent dirt tiles with grass 
+         * on the side that the arrows point towards. 5, of course, has no arrows and represents a dirt tile with no
+         * grass on any side.
+         */
+        if (type == 5) {
             tileImage = StartingClass.tiledirt;
+        } else if (type == 8) {
+            tileImage = StartingClass.tilegrassTop;
+        } else if (type == 4) {
+            tileImage = StartingClass.tilegrassLeft;
+
+        } else if (type == 6) {
+            tileImage = StartingClass.tilegrassRight;
+
+        } else if (type == 2) {
+            tileImage = StartingClass.tilegrassBot;
         }
 
     }

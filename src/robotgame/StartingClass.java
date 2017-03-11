@@ -7,6 +7,9 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -23,7 +26,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     private Image image, currentSprite, character, character2, character3, characterDown,
     characterJumped, background, heliboy, heliboy2, heliboy3, heliboy4, heliboy5;
     
-    public static Image tiledirt, tileocean;
+    public static Image tilegrassTop, tilegrassBot, tilegrassLeft, tilegrassRight, tiledirt;
     
     private URL base;
     // Anim will be used to animate the main character and hanim to animate the heliboys.
@@ -72,7 +75,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         background = getImage(base, "data/background.png");
         
         tiledirt = getImage(base, "data/tiledirt.png");
-        tileocean = getImage(base, "data/tileocean.png");
+        tilegrassTop = getImage(base, "data/tilegrasstop.png");
+        tilegrassBot = getImage(base, "data/tilegrassbot.png");
+        tilegrassLeft = getImage(base, "data/tilegrassleft.png");
+        tilegrassRight = getImage(base, "data/tilegrassright.png");
 
         anim = new Animation();
         anim.addFrame(character, 1250);
@@ -100,17 +106,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         bg2 = new Background(2160, 0);
         
         // Initialize Tiles
-        for (int i = 0; i < 200; i++) {
-            for (int j = 0; j < 12; j++) {
-                if (j == 11) {
-                    Tile t = new Tile(i, j, 2);
-                    tilearray.add(t);
-                }
-                if (j == 10) {
-                    Tile t = new Tile(i, j, 1);
-                    tilearray.add(t);
-                }
-            }
+        try {
+            loadMap("data/map1.txt");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
         hb = new Heliboy(340, 360);
@@ -120,6 +120,45 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         thread.start();
     }
 
+    private void loadMap(String filename) throws IOException {
+        ArrayList lines = new ArrayList();
+        int width = 0;
+        int height = 0;
+
+        BufferedReader reader = new BufferedReader(new FileReader(filename));
+        while (true) {
+            String line = reader.readLine();
+            // no more lines to read
+            if (line == null) {
+                reader.close();
+                break;
+            }
+            //If the line begins with an "!", we ignore it (We used ! to begin comments in the map file).
+            if (!line.startsWith("!")) {
+                lines.add(line);
+                width = Math.max(width, line.length());
+
+            }
+        }
+        height = lines.size();
+
+        for (int j = 0; j < 12; j++) {
+            String line = (String) lines.get(j);
+            for (int i = 0; i < width; i++) {
+                System.out.println(i + "is i ");
+
+                if (i < line.length()) {
+                    char ch = line.charAt(i);
+                    /*Since the characters we read from the text file are characters, not integers (there's a 
+                     * distinction between '1' and 1 much like there's a distinction between "a" and a), we use a 
+                     * built-in method: Character.getNumericValue(ch) to convert it to a number.*/
+                    Tile t = new Tile(i, j, Character.getNumericValue(ch));
+                    tilearray.add(t);
+                }
+            }
+        }
+    }
+    
     @Override
     public void stop() {
 
