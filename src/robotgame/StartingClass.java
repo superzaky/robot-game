@@ -256,6 +256,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             g.fillRect(p.getX(), p.getY(), 10, 5);
         }
 
+        g.drawRect((int)robot.rect.getX(), (int)robot.rect.getY(), (int)robot.rect.getWidth(), (int)robot.rect.getHeight());
+        g.drawRect((int)robot.rect2.getX(), (int)robot.rect2.getY(), (int)robot.rect2.getWidth(), (int)robot.rect2.getHeight());
         /*
          * we will use the currentSprite variable to represent our robot image,
          * and then draw the top left corner of the robot 61 pixels to the left,

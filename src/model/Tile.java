@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.Image;
+import java.awt.Rectangle;
 
 import robotgame.StartingClass;
 
@@ -17,12 +18,14 @@ public class Tile {
 
     private Robot robot = StartingClass.getRobot();
     private Background bg = StartingClass.getBg1();
+    private Rectangle r;
 
     public Tile(int x, int y, int typeInt) {
         tileX = x * 40;
         tileY = y * 40;
 
         type = typeInt;
+        r = new Rectangle();
         /*
          * There are arrows below the numbers 8, 4, 6, and 2. I used these numbers to represent dirt tiles with grass 
          * on the side that the arrows point towards. 5, of course, has no arrows and represents a dirt tile with no
@@ -40,13 +43,20 @@ public class Tile {
 
         } else if (type == 2) {
             tileImage = StartingClass.tilegrassBot;
+        } else {
+            type = 0;
         }
-
     }
     
     public void update() {
         speedX = bg.getSpeedX() * 5;
         tileX += speedX;
+        
+        r.setBounds(tileX, tileY, 40, 40);
+        
+        if (type != 0){
+            checkVerticalCollision(Robot.rect, Robot.rect2);
+        }
     }
 
     public int getTileX() {
@@ -72,5 +82,14 @@ public class Tile {
     public void setTileImage(Image tileImage) {
         this.tileImage = tileImage;
     }
-
+    
+    public void checkVerticalCollision(Rectangle rtop, Rectangle rbot){
+        if (rtop.intersects(r)){
+            System.out.println("upper collision");
+        }
+        
+        if (rbot.intersects(r)){
+            System.out.println("lower collision");
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import robotgame.StartingClass;
@@ -25,6 +26,8 @@ public class Robot {
     // speedX, speed Y are the rate at which these x and y positions change.
     private int speedX = 0;
     private int speedY = 0;
+    public static Rectangle rect = new Rectangle(0, 0, 0, 0);
+    public static Rectangle rect2 = new Rectangle(0, 0, 0, 0);
 
     private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
@@ -73,6 +76,9 @@ public class Robot {
             centerX = 61;
             // Fix the character's centerX at 60 pixels.
         }
+        
+        rect.setRect(centerX - 34, centerY - 63 , 68, 63);
+        rect2.setRect(rect.getX(), rect.getY() + 63, 68, 64);
     }
 
     public void moveRight() {
