@@ -26,8 +26,15 @@ public class Robot {
     // speedX, speed Y are the rate at which these x and y positions change.
     private int speedX = 0;
     private int speedY = 0;
+    //rect refers to the higher body and rect2 refers to the lower body
     public static Rectangle rect = new Rectangle(0, 0, 0, 0);
     public static Rectangle rect2 = new Rectangle(0, 0, 0, 0);
+    //rect3 refers to the left hand and rect4 refers to the right hand
+    public static Rectangle rect3 = new Rectangle(0, 0, 0, 0);
+    public static Rectangle rect4 = new Rectangle(0, 0, 0, 0);
+    public static Rectangle yellowRed = new Rectangle(0, 0, 0, 0);
+    public static Rectangle footleft = new Rectangle(0, 0, 0, 0);
+    public static Rectangle footright = new Rectangle(0, 0, 0, 0);
 
     private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
@@ -64,9 +71,12 @@ public class Robot {
         centerY += speedY;
 
         // Handles Jumping
-        if (jumped == true) {
-            // While the character is in the air, add 1 to his speedY.
-            speedY += 1;
+        //Add 1 to his speedY.
+        speedY += 1;
+
+        // This if statements prevents small fluctuations in speedY from registering as jumps.
+        if (speedY > 3) {
+            jumped = true;
         }
 
         // Prevents going beyond X coordinate of 0
@@ -76,9 +86,14 @@ public class Robot {
             centerX = 61;
             // Fix the character's centerX at 60 pixels.
         }
-        
-        rect.setRect(centerX - 34, centerY - 63 , 68, 63);
+
+        rect.setRect(centerX - 34, centerY - 63, 68, 63);
         rect2.setRect(rect.getX(), rect.getY() + 63, 68, 64);
+        rect3.setRect(rect.getX() - 26, rect.getY() + 32, 26, 20);
+        rect4.setRect(rect.getX() + 68, rect.getY() + 32, 26, 20);
+        yellowRed.setRect(centerX - 110, centerY - 110, 180, 180);
+        footleft.setRect(centerX - 50, centerY + 20, 50, 15);
+        footright.setRect(centerX, centerY + 20, 50, 15);
     }
 
     public void moveRight() {

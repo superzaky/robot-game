@@ -1,0 +1,5 @@
+#Eclipse specific git ignore
+.project
+java.policy.applet
+.classpath
+bin/
