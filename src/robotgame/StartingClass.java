@@ -2,6 +2,7 @@ package robotgame;
 
 import java.applet.Applet;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -22,7 +23,11 @@ import robotgame.framework.Animation;
 
 public class StartingClass extends Applet implements Runnable, KeyListener {
     private static Robot robot;
-    private Heliboy hb, hb2;
+    public static Heliboy hb, hb2;
+    //int variable to store the score
+    public static int score = 0;
+    //Font object to display the score
+    private Font font = new Font(null, Font.BOLD, 30);
     private Image image, currentSprite, character, character2, character3, characterDown,
     characterJumped, background, heliboy, heliboy2, heliboy3, heliboy4, heliboy5;
     
@@ -270,6 +275,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         g.drawImage(currentSprite, robot.getCenterX() - 61, robot.getCenterY() - 63, this);
         g.drawImage(hanim.getImage(), hb.getCenterX() - 48, hb.getCenterY() - 48, this);
         g.drawImage(hanim.getImage(), hb2.getCenterX() - 48, hb2.getCenterY() - 48, this);
+        g.setFont(font);
+        //sets g to white, so that whatever follows it will be done in white (unless it is an image).
+        g.setColor(Color.WHITE);
+        //draws a String by parsing the integer variable score as a String object. It does this at the location 740, 30.
+        g.drawString(Integer.toString(score), 740, 30); 
     }
 
     private void updateTiles() {
