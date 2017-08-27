@@ -20,21 +20,21 @@ public class Robot {
     private boolean ducked = false;
     private boolean readyToFire = true;
 
-    private static Background bg1 = StartingClass.getBg1();
-    private static Background bg2 = StartingClass.getBg2();
+    private static Background bg1;
+    private static Background bg2;
 
     // speedX, speed Y are the rate at which these x and y positions change.
     private int speedX = 0;
     private int speedY = 0;
     //rect refers to the higher body and rect2 refers to the lower body
-    public static Rectangle rect = new Rectangle(0, 0, 0, 0);
-    public static Rectangle rect2 = new Rectangle(0, 0, 0, 0);
+    public static Rectangle rect;
+    public static Rectangle rect2;
     //rect3 refers to the left hand and rect4 refers to the right hand
-    public static Rectangle rect3 = new Rectangle(0, 0, 0, 0);
-    public static Rectangle rect4 = new Rectangle(0, 0, 0, 0);
-    public static Rectangle yellowRed = new Rectangle(0, 0, 0, 0);
-    public static Rectangle footleft = new Rectangle(0, 0, 0, 0);
-    public static Rectangle footright = new Rectangle(0, 0, 0, 0);
+    public static Rectangle rect3;
+    public static Rectangle rect4;
+    public static Rectangle yellowRed;
+    public static Rectangle footleft;
+    public static Rectangle footright;
 
     private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
@@ -220,5 +220,32 @@ public class Robot {
 
     public void setReadyToFire(boolean readyToFire) {
         this.readyToFire = readyToFire;
+    }
+    
+    public static Robot getNull() {
+        bg1 = null;
+        bg2 = null;
+
+        rect = null;
+        rect2 = null;
+        rect3 = null;
+        rect4 = null;
+        yellowRed = null;
+        footleft = null;
+        footright = null;
+
+        return null;
+    }
+    
+    public static void init() {
+        bg1 = StartingClass.getBg1();
+        bg2 = StartingClass.getBg2();
+        rect = new Rectangle(0, 0, 0, 0);
+        rect2 = new Rectangle(0, 0, 0, 0);
+        rect3 = new Rectangle(0, 0, 0, 0); // left hand
+        rect4 = new Rectangle(0, 0, 0, 0); // right hand
+        yellowRed = new Rectangle(0, 0, 0, 0);
+        footleft = new Rectangle(0, 0, 0, 0);
+        footright = new Rectangle(0, 0, 0, 0);
     }
 }

@@ -37,12 +37,18 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     // Anim will be used to animate the main character and hanim to animate the heliboys.
     private Animation anim, hanim;
     
-    private ArrayList<Tile> tilearray = new ArrayList<Tile>();
+    private ArrayList<Tile> tilearray;
     
     private Graphics second;
     // We make them static so that we can create getters and setters for them to
     // be used in othe classes for movement)
     private static Background bg1, bg2;
+    
+    enum GameState {
+        Running, Dead
+    }
+
+    GameState state = GameState.Running;
 
     @Override
     public void init() {
@@ -107,9 +113,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     @Override
     public void start() {
         // super.start();
+        tilearray = new ArrayList<Tile>();
         bg1 = new Background(0, 0);
         bg2 = new Background(2160, 0);
         robot = new Robot();
+        Robot.init();
         
         // Initialize Tiles
         try {
@@ -176,42 +184,48 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
     @Override
     public void run() {
-        while (true) {
-            robot.update();
-            if (robot.isJumped()) {
-                currentSprite = characterJumped;
-            } else if (robot.isJumped() == false && robot.isDucked() == false) {
-                currentSprite = anim.getImage();
-            }
-
-            ArrayList projectiles = robot.getProjectiles();
-            for (int i = 0; i < projectiles.size(); i++) {
-                Projectile p = (Projectile) projectiles.get(i);
-                if (p.isVisible() == true) {
-                    p.update();
-                } else {
-                    projectiles.remove(i);
+        
+        if (state == GameState.Running) { 
+            while (true) {
+                robot.update();
+                if (robot.isJumped()) {
+                    currentSprite = characterJumped;
+                } else if (robot.isJumped() == false && robot.isDucked() == false) {
+                    currentSprite = anim.getImage();
                 }
-            }
-            
-            updateTiles();
-            hb.update();
-            hb2.update();
-            bg1.update();
-            bg2.update();
-            
-            animate();
-            /*
-             * repaint(); - built in method - calls the paint method (in which
-             * we draw objects onto the screen). We haven't created the paint
-             * method yet, but every 17 milliseconds, the paint method will be
-             * called..
-             */
-            repaint();
-            try {
-                Thread.sleep(17);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                
+                ArrayList projectiles = robot.getProjectiles();
+                for (int i = 0; i < projectiles.size(); i++) {
+                    Projectile p = (Projectile) projectiles.get(i);
+                    if (p.isVisible() == true) {
+                        p.update();
+                    } else {
+                        projectiles.remove(i);
+                    }
+                }
+                
+                updateTiles();
+                hb.update();
+                hb2.update();
+                bg1.update();
+                bg2.update();
+                
+                animate();
+                /*
+                 * repaint(); - built in method - calls the paint method (in which
+                 * we draw objects onto the screen). We haven't created the paint
+                 * method yet, but every 17 milliseconds, the paint method will be
+                 * called..
+                 */
+                repaint();
+                try {
+                    Thread.sleep(17);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (robot.getCenterY() > 500) {
+                    state = GameState.Dead;
+                }
             }
         }
     }
@@ -250,36 +264,46 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
     @Override
     public void paint(Graphics g) {
-        g.drawImage(background, bg1.getBgX(), bg1.getBgY(), this);
-        g.drawImage(background, bg2.getBgX(), bg2.getBgY(), this);
-        paintTiles(g);
-        
-        ArrayList projectiles = robot.getProjectiles();
-        for (int i = 0; i < projectiles.size(); i++) {
-            Projectile p = (Projectile) projectiles.get(i);
-            g.setColor(Color.YELLOW);
-            g.fillRect(p.getX(), p.getY(), 10, 5);
+        if (state == GameState.Running) {
+            g.drawImage(background, bg1.getBgX(), bg1.getBgY(), this);
+            g.drawImage(background, bg2.getBgX(), bg2.getBgY(), this);
+            paintTiles(g);
+            
+            ArrayList projectiles = robot.getProjectiles();
+            for (int i = 0; i < projectiles.size(); i++) {
+                Projectile p = (Projectile) projectiles.get(i);
+                g.setColor(Color.YELLOW);
+                g.fillRect(p.getX(), p.getY(), 10, 5);
+            }
+            
+            g.drawRect((int)robot.rect.getX(), (int)robot.rect.getY(), (int)robot.rect.getWidth(), (int)robot.rect.getHeight());
+            g.drawRect((int)robot.rect2.getX(), (int)robot.rect2.getY(), (int)robot.rect2.getWidth(), (int)robot.rect2.getHeight());
+            g.drawRect((int)robot.rect3.getX(), (int)robot.rect3.getY(), (int)robot.rect3.getWidth(), (int)robot.rect3.getHeight());
+            g.drawRect((int)robot.rect4.getX(), (int)robot.rect4.getY(), (int)robot.rect4.getWidth(), (int)robot.rect4.getHeight());
+            g.drawRect((int)robot.yellowRed.getX(), (int)robot.yellowRed.getY(), (int)robot.yellowRed.getWidth(), (int)robot.yellowRed.getHeight());
+            /*
+             * we will use the currentSprite variable to represent our robot image,
+             * and then draw the top left corner of the robot 61 pixels to the left,
+             * and 63 pixels above the (centerX, centerY), and then use the "this"
+             * keyword as our ImageObserver.
+             */
+            g.drawImage(currentSprite, robot.getCenterX() - 61, robot.getCenterY() - 63, this);
+            g.drawImage(hanim.getImage(), hb.getCenterX() - 48, hb.getCenterY() - 48, this);
+            g.drawImage(hanim.getImage(), hb2.getCenterX() - 48, hb2.getCenterY() - 48, this);
+            g.setFont(font);
+            //sets g to white, so that whatever follows it will be done in white (unless it is an image).
+            g.setColor(Color.WHITE);
+            //draws a String by parsing the integer variable score as a String object. It does this at the location 740, 30.
+            g.drawString(Integer.toString(score), 740, 30); 
+        } else if (state == GameState.Dead) {
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, 800, 480);
+            g.setColor(Color.WHITE);
+            g.drawString("Dead", 360, 240);
+            g.drawString("Press ENTER to restart", 215, 290);
         }
 
-        g.drawRect((int)robot.rect.getX(), (int)robot.rect.getY(), (int)robot.rect.getWidth(), (int)robot.rect.getHeight());
-        g.drawRect((int)robot.rect2.getX(), (int)robot.rect2.getY(), (int)robot.rect2.getWidth(), (int)robot.rect2.getHeight());
-        g.drawRect((int)robot.rect3.getX(), (int)robot.rect3.getY(), (int)robot.rect3.getWidth(), (int)robot.rect3.getHeight());
-        g.drawRect((int)robot.rect4.getX(), (int)robot.rect4.getY(), (int)robot.rect4.getWidth(), (int)robot.rect4.getHeight());
-        g.drawRect((int)robot.yellowRed.getX(), (int)robot.yellowRed.getY(), (int)robot.yellowRed.getWidth(), (int)robot.yellowRed.getHeight());
-        /*
-         * we will use the currentSprite variable to represent our robot image,
-         * and then draw the top left corner of the robot 61 pixels to the left,
-         * and 63 pixels above the (centerX, centerY), and then use the "this"
-         * keyword as our ImageObserver.
-         */
-        g.drawImage(currentSprite, robot.getCenterX() - 61, robot.getCenterY() - 63, this);
-        g.drawImage(hanim.getImage(), hb.getCenterX() - 48, hb.getCenterY() - 48, this);
-        g.drawImage(hanim.getImage(), hb2.getCenterX() - 48, hb2.getCenterY() - 48, this);
-        g.setFont(font);
-        //sets g to white, so that whatever follows it will be done in white (unless it is an image).
-        g.setColor(Color.WHITE);
-        //draws a String by parsing the integer variable score as a String object. It does this at the location 740, 30.
-        g.drawString(Integer.toString(score), 740, 30); 
+            
     }
 
     private void updateTiles() {
@@ -359,7 +383,25 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         case KeyEvent.VK_CONTROL:
             robot.setReadyToFire(true);
             break;
+        case KeyEvent.VK_ENTER:
+            if (state == GameState.Dead) {
+                restart();
+            }
+            break;
         }
+    }
+    
+    private void restart() {
+        tilearray = null;
+        bg2 = null;
+        bg1 = null;
+        robot = Robot.getNull();
+        hb = null;
+        hb2 = null;
+        score = 0;
+        state = GameState.Running;
+
+        start();
     }
 
     public static Background getBg1() {
